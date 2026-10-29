@@ -455,14 +455,67 @@ function updateWeatherBackground() {
 
 updateWeatherBackground();
 
+
 /* ===== Rahul's Welcome Screen ===== */
 
 const welcomeScreen = document.querySelector("#welcome-screen");
 const getStartedButton = document.querySelector("#get-started-button");
 
+const WELCOME_SESSION_KEY = "rahulWeatherWelcomeStarted";
+
 if (welcomeScreen && getStartedButton) {
+    // Keep the welcome screen hidden after it has been dismissed
+    // during the current browser tab session.
+    try {
+        if (sessionStorage.getItem(WELCOME_SESSION_KEY) === "true") {
+            welcomeScreen.style.display = "none";
+        }
+    } catch (error) {
+        // Continue normally if session storage is unavailable.
+    }
+
     getStartedButton.addEventListener("click", function () {
         welcomeScreen.classList.add("hide");
+
+        try {
+            sessionStorage.setItem(WELCOME_SESSION_KEY, "true");
+        } catch (error) {
+            // The button still works if storage is unavailable.
+        }
+
+        window.setTimeout(function () {
+            welcomeScreen.style.display = "none";
+        }, 500);
+    });
+}
+
+
+
+/* ===== Rahul's Welcome Screen ===== */
+
+const welcomeScreen = document.querySelector("#welcome-screen");
+const getStartedButton = document.querySelector("#get-started-button");
+const WELCOME_SESSION_KEY = "rahulWeatherWelcomeStarted";
+
+if (welcomeScreen && getStartedButton) {
+    // Do not show the welcome screen again after it has been dismissed
+    // during the current browser tab session.
+    try {
+        if (sessionStorage.getItem(WELCOME_SESSION_KEY) === "true") {
+            welcomeScreen.style.display = "none";
+        }
+    } catch (error) {
+        // The welcome button will still work if session storage is unavailable.
+    }
+
+    getStartedButton.addEventListener("click", function () {
+        welcomeScreen.classList.add("hide");
+
+        try {
+            sessionStorage.setItem(WELCOME_SESSION_KEY, "true");
+        } catch (error) {
+            // The welcome screen can still be dismissed normally.
+        }
 
         window.setTimeout(function () {
             welcomeScreen.style.display = "none";

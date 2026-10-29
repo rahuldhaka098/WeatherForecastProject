@@ -1037,3 +1037,123 @@ body.weather-rainy {
         transition: none;
     }
 }
+
+
+/* ===== Rahul's Welcome Screen ===== */
+
+.welcome-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+    background: linear-gradient(135deg, #0b1220, #172554, #075985);
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.welcome-screen-card {
+    width: 100%;
+    max-width: 600px;
+    padding: 48px 28px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 28px;
+    background: rgba(255, 255, 255, 0.10);
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(15px);
+    animation: welcome-appear 0.7s ease-out;
+}
+
+.welcome-screen-icon {
+    margin-bottom: 18px;
+    font-size: 76px;
+}
+
+.welcome-screen-card h1 {
+    margin: 0 0 16px;
+    color: #ffffff;
+    font-size: clamp(28px, 5vw, 44px);
+    line-height: 1.25;
+}
+
+.welcome-screen-card > p {
+    color: #dbeafe;
+    font-size: 17px;
+    line-height: 1.7;
+}
+
+#get-started-button {
+    margin-top: 18px;
+    padding: 15px 32px;
+    border: none;
+    border-radius: 12px;
+    background: #fbbf24;
+    color: #172554;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+#get-started-button:hover {
+    background: #f59e0b;
+    transform: translateY(-3px);
+}
+
+#get-started-button:focus-visible {
+    outline: 3px solid #ffffff;
+    outline-offset: 4px;
+}
+
+.welcome-screen-card .welcome-screen-credit {
+    margin-top: 30px;
+    margin-bottom: 0;
+    font-size: 13px;
+    opacity: 0.85;
+}
+
+.welcome-screen.hide {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+@keyframes welcome-appear {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .welcome-screen,
+    .welcome-screen-card,
+    #get-started-button {
+        animation: none;
+        transition: none;
+    }
+}
+
+/* ===== Developer Credit ===== */
+
+.header .developer-credit {
+    margin-top: 6px;
+    font-size: 13px;
+    color: #bfdbfe;
+    letter-spacing: 0.3px;
+}
+
+/* ===== Copyright Footer ===== */
+
+footer .copyright {
+    margin-top: 6px;
+    font-size: 12px;
+    opacity: 0.8;
+}
