@@ -1,0 +1,201 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Weather Forecast</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    
+    <div id="loading-overlay" class="loading-overlay"
+        role="status"
+        aria-live="polite"
+        aria-label="Loading weather information"
+        hidden>
+        <div class="loading-card">
+            <div class="loading-spinner" aria-hidden="true"></div>
+            <h2>Getting Your Weather</h2>
+            <p>Checking the latest forecast for you...</p>
+        </div>
+    </div>
+
+    <main class="container">
+
+        <header class="header">
+            <div class="logo">☁️</div>
+            <h1>Weather Forecast</h1>
+            <p>Discover the weather in your city</p>
+        </header>
+
+        <form method="POST" action="/" class="search-form" autocomplete="off">
+            <input
+                type="text"
+                name="city"
+                placeholder="Enter city name, e.g. Delhi"
+                value="{{ city }}"
+                maxlength="100"
+                required
+                aria-label="City name"
+            >
+            <button type="submit">Search</button>
+            <button type="button" class="clear-button">Clear</button>
+        </form>
+        
+        <div class="recent-searches" id="recent-searches" hidden>
+            <div class="recent-searches-header">
+                <h3>Recent Searches</h3>
+                <button type="button" id="clear-history-button">
+                    Clear history
+                </button>
+            </div>
+            <div class="recent-searches-list" id="recent-searches-list"></div>
+        </div>
+
+        
+        <div class="unit-selector" aria-label="Temperature unit">
+            <span>Temperature:</span>
+            <button type="button" class="unit-button active" data-unit="celsius" aria-pressed="true">°C</button>
+            <button type="button" class="unit-button" data-unit="fahrenheit" aria-pressed="false">°F</button>
+        </div>
+
+
+        {% if error %}
+            <div class="error-message" role="alert">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        {% if weather %}
+
+            <section class="weather-card">
+                <p class="location">
+                    📍 {{ weather.city }}{% if weather.country %},
+                    {{ weather.country }}{% endif %}
+                </p>
+
+                <div class="current-weather-icon" aria-hidden="true">
+                    {{ weather.icon }}
+                </div>
+
+                <p class="condition" id="current-weather-description" data-weather-description>{{ weather.description }}</p>
+
+                <div class="temperature">
+                    
+                 <span class="temperature-number" data-celsius="{{ weather.temperature }}">{{ weather.temperature }}</span><span class="temperature-value" data-celsius-unit>°C</span>
+
+                </div>
+
+                <p class="updated">
+                    Observed at {{ weather.time }}
+                </p>
+
+                <div class="details-grid">
+                    <div class="detail">
+                        <span class="detail-icon thermometer-icon">🌡️</span>
+                        <p>Feels like</p>
+                        <h3><span class="temperature-number" data-celsius="{{ weather.feels_like }}">{{ weather.feels_like }}</span><span class="temperature-value" data-celsius-unit>°C</span></h3>
+                    </div>
+
+                    <div class="detail">
+                        <span class="detail-icon">💧</span>
+                        <p>Humidity</p>
+                        <h3>{{ weather.humidity }}%</h3>
+                    </div>
+
+                    <div class="detail">
+                        <span class="detail-icon">💨</span>
+                        <p>Wind speed</p>
+                        <h3>{{ weather.wind_speed }} km/h</h3>
+                    </div>
+                </div>
+            </section>
+
+            <section class="forecast-section">
+                <h2>5-Day Forecast</h2>
+
+                
+            <div class="temperature-chart-card">
+                <h3>5-Day Temperature Trend</h3>
+                <p class="chart-description">
+                    Compare the expected high and low temperatures.
+                </p>
+                <div class="temperature-chart-container">
+                    <canvas
+                        id="temperature-chart"
+                        role="img"
+                        aria-label="Chart of forecast high and low temperatures for the next five days">
+                        Your browser does not support the chart canvas.
+                    </canvas>
+                </div>
+
+                <div class="chart-legend">
+                    <span class="chart-legend-item">
+                        <span class="chart-legend-dot high-temperature-dot"></span>
+                        Daily High
+                    </span>
+
+                    <span class="chart-legend-item">
+                        <span class="chart-legend-dot low-temperature-dot"></span>
+                        Daily Low
+                    </span>
+                </div>
+                <p id="temperature-chart-status" class="chart-status" aria-live="polite">
+                    Preparing temperature chart...
+                </p>
+            </div>
+
+                <script id="forecast-chart-data" type="application/json">
+                    {{ forecast | tojson }}
+                </script>    
+
+                <div class="forecast-grid">
+                    {% for day in forecast %}
+                        <article class="forecast-card">
+                            <p class="forecast-date">{{ day.date }}</p>
+                            <div class="forecast-icon" aria-hidden="true">
+                                {{ day.icon }}
+                            </div>
+                            <p class="forecast-condition">
+                                {{ day.description }}
+                            </p>
+                           <p class="forecast-temp">
+                                <strong><span class="temperature-number" data-celsius="{{ day.max_temp }}">{{ day.max_temp }}</span><span class="temperature-value" data-celsius-unit>°</span></strong>
+                                <span class="forecast-separator">/</span>
+                                <span><span class="temperature-number" data-celsius="{{ day.min_temp }}">{{ day.min_temp }}</span><span class="temperature-value" data-celsius-unit>°</span></span>
+                            </p>
+                            <p class="temp-label">High / Low</p>
+                        </article>
+                    {% endfor %}
+                </div>
+            </section>
+
+        {% else %}
+
+            <section class="welcome">
+                <div class="welcome-icon">🌤️</div>
+                <h2>How's the weather?</h2>
+                <p>
+                    Enter a city name above to discover its current
+                    weather and five-day forecast.
+                </p>
+            </section>
+
+        {% endif %}
+
+        <footer>
+            <p>Weather data provided by Open-Meteo</p>
+            <p>Built with Python, Flask, HTML and CSS</p>
+        </footer>
+
+    </main>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>
