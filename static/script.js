@@ -454,3 +454,18 @@ function updateWeatherBackground() {
 }
 
 updateWeatherBackground();
+
+/* ===== Rahul's Welcome Screen ===== */
+
+const welcomeScreen = document.querySelector("#welcome-screen");
+const getStartedButton = document.querySelector("#get-started-button");
+
+if (welcomeScreen && getStartedButton) {
+    getStartedButton.addEventListener("click", function () {
+        welcomeScreen.classList.add("hide");
+
+        window.setTimeout(function () {
+            welcomeScreen.style.display = "none";
+        }, 500);
+    });
+}
