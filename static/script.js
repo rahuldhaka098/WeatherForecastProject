@@ -491,34 +491,61 @@ if (welcomeScreen && getStartedButton) {
 
 
 
-/* ===== Rahul's Welcome Screen ===== */
 
-const welcomeScreen = document.querySelector("#welcome-screen");
-const getStartedButton = document.querySelector("#get-started-button");
-const WELCOME_SESSION_KEY = "rahulWeatherWelcomeStarted";
+/* ===== Welcome Screen: Fixed Version ===== */
 
-if (welcomeScreen && getStartedButton) {
-    // Do not show the welcome screen again after it has been dismissed
-    // during the current browser tab session.
-    try {
-        if (sessionStorage.getItem(WELCOME_SESSION_KEY) === "true") {
-            welcomeScreen.style.display = "none";
-        }
-    } catch (error) {
-        // The welcome button will still work if session storage is unavailable.
+(function () {
+    const welcomeScreen = document.querySelector("#welcome-screen");
+    const getStartedButton = document.querySelector("#get-started-button");
+    const searchForm = document.querySelector(".search-form");
+
+    const SKIP_WELCOME_ONCE_KEY = "rahulWeatherSkipWelcomeOnce";
+
+    if (!welcomeScreen || !getStartedButton) {
+        return;
     }
 
+    // If the previous page load was caused by a city search,
+    // hide the welcome screen on this response only.
+    let skipWelcomeOnce = false;
+
+    try {
+        skipWelcomeOnce =
+            sessionStorage.getItem(SKIP_WELCOME_ONCE_KEY) === "true";
+
+        if (skipWelcomeOnce) {
+            sessionStorage.removeItem(SKIP_WELCOME_ONCE_KEY);
+        }
+    } catch (error) {
+        // The welcome screen still works if storage is unavailable.
+    }
+
+    if (skipWelcomeOnce) {
+        welcomeScreen.style.display = "none";
+    }
+
+    // Mark a city search so the welcome screen does not cover
+    // the dashboard returned by the Flask POST request.
+    if (searchForm) {
+        searchForm.addEventListener("submit", function (event) {
+            const cityInput = searchForm.querySelector('input[name="city"]');
+
+            if (cityInput && cityInput.value.trim() !== "") {
+                try {
+                    sessionStorage.setItem(SKIP_WELCOME_ONCE_KEY, "true");
+                } catch (error) {
+                    // Searching should still work if storage is unavailable.
+                }
+            }
+        });
+    }
+
+    // Hide the welcome screen when Get Started is clicked.
     getStartedButton.addEventListener("click", function () {
         welcomeScreen.classList.add("hide");
-
-        try {
-            sessionStorage.setItem(WELCOME_SESSION_KEY, "true");
-        } catch (error) {
-            // The welcome screen can still be dismissed normally.
-        }
 
         window.setTimeout(function () {
             welcomeScreen.style.display = "none";
         }, 500);
     });
-}
+})();

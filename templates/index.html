@@ -4,8 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Rahul's Weather Forecast</title>
+    <title>Weather Forecast</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='style.css') }}">
@@ -14,24 +13,28 @@
 <body>
 
     <!-- Welcome Screen -->
-    <section id="welcome-screen" class="welcome-screen" aria-label="Welcome">
+    <section id="welcome-screen" class="welcome-screen"
+             aria-label="Welcome">
         <div class="welcome-screen-card">
             <div class="welcome-screen-icon" aria-hidden="true">🌤️</div>
-            <h1>Welcome to Rahul's Weather Forecast</h1>
+
+            <h1>Welcome to Weather Forecast</h1>
             <p>Discover the weather. Plan your day.</p>
+
             <button type="button" id="get-started-button">
                 Get Started →
             </button>
-            <p class="welcome-screen-credit">Designed and developed by Rahul</p>
+
+            <p class="welcome-screen-credit">
+                Designed and developed by Rahul
+            </p>
         </div>
     </section>
 
     <!-- Loading Overlay -->
     <div id="loading-overlay" class="loading-overlay"
-        role="status"
-        aria-live="polite"
-        aria-label="Loading weather information"
-        hidden>
+         role="status" aria-live="polite"
+         aria-label="Loading weather information" hidden>
         <div class="loading-card">
             <div class="loading-spinner" aria-hidden="true"></div>
             <h2>Getting Your Weather</h2>
@@ -45,20 +48,18 @@
             <div class="logo">☁️</div>
             <h1>Weather Forecast</h1>
             <p>Discover the weather in your city</p>
-            <p class="developer-credit">Designed and developed by Rahul</p>
+            <p class="developer-credit">
+                Designed and developed by Rahul
+            </p>
         </header>
 
         <!-- City Search -->
-        <form method="POST" action="/" class="search-form" autocomplete="off">
-            <input
-                type="text"
-                name="city"
-                placeholder="Enter city name, e.g. Delhi"
-                value="{{ city }}"
-                maxlength="100"
-                required
-                aria-label="City name"
-            >
+        <form method="POST" action="/" class="search-form"
+              autocomplete="off">
+            <input type="text" name="city"
+                   placeholder="Enter city name, e.g. Delhi"
+                   value="{{ city }}" maxlength="100"
+                   required aria-label="City name">
             <button type="submit">Search</button>
             <button type="button" class="clear-button">Clear</button>
         </form>
@@ -71,7 +72,8 @@
                     Clear history
                 </button>
             </div>
-            <div class="recent-searches-list" id="recent-searches-list"></div>
+            <div class="recent-searches-list"
+                 id="recent-searches-list"></div>
         </div>
 
         <!-- Temperature Unit Selector -->
@@ -103,7 +105,9 @@
                 </div>
 
                 <p class="condition" id="current-weather-description"
-                   data-weather-description>{{ weather.description }}</p>
+                   data-weather-description>
+                    {{ weather.description }}
+                </p>
 
                 <div class="temperature">
                     <span class="temperature-number"
@@ -118,8 +122,10 @@
                     <div class="detail">
                         <span class="detail-icon thermometer-icon">🌡️</span>
                         <p>Feels like</p>
-                        <h3><span class="temperature-number"
-                                  data-celsius="{{ weather.feels_like }}">{{ weather.feels_like }}</span><span class="temperature-value" data-celsius-unit>°C</span></h3>
+                        <h3>
+                            <span class="temperature-number"
+                                  data-celsius="{{ weather.feels_like }}">{{ weather.feels_like }}</span><span class="temperature-value" data-celsius-unit>°C</span>
+                        </h3>
                     </div>
 
                     <div class="detail">
@@ -140,7 +146,6 @@
             <section class="forecast-section">
                 <h2>5-Day Forecast</h2>
 
-                <!-- Temperature Chart -->
                 <div class="temperature-chart-card">
                     <h3>5-Day Temperature Trend</h3>
                     <p class="chart-description">
@@ -148,10 +153,8 @@
                     </p>
 
                     <div class="temperature-chart-container">
-                        <canvas
-                            id="temperature-chart"
-                            role="img"
-                            aria-label="Chart of forecast high and low temperatures for the next five days">
+                        <canvas id="temperature-chart" role="img"
+                                aria-label="Chart of forecast high and low temperatures for the next five days">
                             Your browser does not support the chart canvas.
                         </canvas>
                     </div>
@@ -161,7 +164,6 @@
                             <span class="chart-legend-dot high-temperature-dot"></span>
                             Daily High
                         </span>
-
                         <span class="chart-legend-item">
                             <span class="chart-legend-dot low-temperature-dot"></span>
                             Daily Low
@@ -193,12 +195,10 @@
 
                             <p class="forecast-temp">
                                 <strong><span class="temperature-number"
-                                    data-celsius="{{ day.max_temp }}">{{ day.max_temp }}</span><span class="temperature-value" data-celsius-unit>°</span></strong>
-
+                                    data-celsius="{{ day.max_temp }}">{{ day.max_temp }}</span><span class="temperature-value" data-celsius-unit>°C</span></strong>
                                 <span class="forecast-separator">/</span>
-
                                 <span><span class="temperature-number"
-                                    data-celsius="{{ day.min_temp }}">{{ day.min_temp }}</span><span class="temperature-value" data-celsius-unit>°</span></span>
+                                    data-celsius="{{ day.min_temp }}">{{ day.min_temp }}</span><span class="temperature-value" data-celsius-unit>°C</span></span>
                             </p>
 
                             <p class="temp-label">High / Low</p>
@@ -209,7 +209,6 @@
 
         {% else %}
 
-            <!-- Initial Dashboard Message -->
             <section class="welcome">
                 <div class="welcome-icon">🌤️</div>
                 <h2>How's the weather?</h2>
@@ -221,16 +220,16 @@
 
         {% endif %}
 
-        <!-- Footer and Copyright -->
         <footer>
             <p>Weather data provided by Open-Meteo</p>
             <p>Built with Python, Flask, HTML and CSS</p>
-            <p class="copyright">&copy; 2026 Rahul. All rights reserved.</p>
+            <p class="copyright">
+                &copy; 2026 Rahul. All rights reserved.
+            </p>
         </footer>
 
     </main>
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
-
 </body>
 </html>
