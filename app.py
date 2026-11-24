@@ -172,10 +172,19 @@ def home():
             except requests.exceptions.Timeout:
                 error = "The weather service took too long to respond."
 
-            except requests.exceptions.RequestException:
+            except requests.exceptions.RequestException as e:
+                app.logger.exception("Open-Meteo API request failed")
+
+                if isinstance(e, requests.exceptions.HTTPError) and e.response is not None:
+                    app.logger.error(
+                        "HTTP Status: %s | Response: %s",
+                        e.response.status_code,
+                        e.response.text[:1000]
+                    )
+
                 error = (
                     "Unable to connect to the weather service. "
-                    "Please check your internet connection and try again."
+                    "Please try again later."
                 )
 
             except (KeyError, IndexError, TypeError, ValueError):
